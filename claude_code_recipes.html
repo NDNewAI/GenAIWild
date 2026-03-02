@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code — Ingredients & Recipes</title>
+<style>
+  :root {
+    --nd-blue: #0C2340;
+    --nd-gold: #C99700;
+    --nd-gold-light: #f0c840;
+    --white: #ffffff;
+    --gray-light: #f4f5f7;
+    --gray-mid: #e0e3e8;
+    --gray-dark: #5a6374;
+    --text: #1a1a1a;
+    --cat1: #1a6b8a;   /* ingredients */
+    --cat2: #7a5c1e;   /* discipline recipes */
+    --cat3: #2e6b4f;   /* understand AI */
+    --radius: 12px;
+    --shadow: 0 4px 18px rgba(0,0,0,0.12);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.20);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    background: var(--gray-light);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--nd-blue);
+    color: var(--white);
+    padding: 2rem 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--nd-gold);
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; }
+  header .kicker {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nd-gold);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  header h1 {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  header p.subtitle {
+    font-size: 1rem;
+    color: #b8c5d4;
+    max-width: 700px;
+    line-height: 1.5;
+  }
+  .header-meta {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .header-meta span {
+    font-size: 0.82rem;
+    color: #8da0b8;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-mid);
+    padding: 0.8rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .filter-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gray-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.3rem;
+  }
+  .filter-btn {
+    padding: 0.35rem 0.9rem;
+    border-radius: 99px;
+    border: 2px solid var(--gray-mid);
+    background: var(--white);
+    color: var(--gray-dark);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: inherit;
+  }
+  .filter-btn:hover { border-color: var(--nd-blue); color: var(--nd-blue); }
+  .filter-btn.active {
+    background: var(--nd-blue);
+    border-color: var(--nd-blue);
+    color: var(--white);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .intro-box {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--nd-gold);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--gray-dark);
+  }
+  .intro-box strong { color: var(--nd-blue); }
+
+  .category-section { margin-bottom: 2.5rem; }
+  .category-section.hidden { display: none; }
+  .discipline-group.hidden { display: none; }
+  .discipline-nav.hidden { display: none; }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--gray-mid);
+  }
+  .category-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .category-header h2 {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    color: var(--nd-blue);
+    font-weight: bold;
+  }
+  .category-count {
+    font-size: 0.78rem;
+    color: var(--gray-dark);
+    background: var(--gray-mid);
+    border-radius: 99px;
+    padding: 0.1rem 0.6rem;
+    font-weight: 600;
+  }
+  .category-sub {
+    font-size: 0.8rem;
+    color: var(--gray-dark);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  /* PROJECT CARD */
+  .project-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 2px solid transparent;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .project-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+    border-color: var(--nd-gold);
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+  .card-emoji {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .card-number {
+    position: absolute;
+    top: 0.8rem; right: 1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gray-mid);
+    letter-spacing: 0.05em;
+  }
+  .card-title {
+    font-family: Georgia, serif;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--nd-blue);
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+    line-height: 1.5;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    background: var(--gray-light);
+    color: var(--gray-dark);
+  }
+  .tag-discipline { background: #e8f0f8; color: #1a4a7a; }
+  .tag-edu { background: #e8f4ee; color: #1a4a30; }
+  .tag-ing { background: #eaf1f5; color: #1a4060; }
+  .card-arrow {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: var(--nd-gold);
+    font-weight: 700;
+  }
+  .data-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-zero { background: #27ae60; }
+  .dot-free { background: #e0a800; }
+  .dot-own  { background: #7a8a9e; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 35, 64, 0.6);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.22s;
+    position: relative;
+  }
+  .modal-overlay.open .modal {
+    transform: translateY(0) scale(1);
+  }
+  .modal-header {
+    background: var(--nd-blue);
+    color: var(--white);
+    padding: 1.5rem 1.8rem 1.3rem;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+  }
+  .modal-header .modal-kicker {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--nd-gold);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .modal-header h2 {
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    padding-right: 2rem;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1.2rem;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: var(--white);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.28); }
+
+  .modal-body { padding: 1.8rem; }
+
+  .recipe-section { margin-bottom: 1.8rem; }
+  .recipe-section:last-child { margin-bottom: 0; }
+  .recipe-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--gray-mid);
+  }
+  .recipe-section-icon { font-size: 1.1rem; }
+  .recipe-section-header h3 {
+    font-family: Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--nd-blue);
+    font-weight: bold;
+  }
+
+  /* prompt block */
+  .prompt-block {
+    background: #faf7ef;
+    border-left: 4px solid var(--nd-gold);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.1rem;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  /* chain steps */
+  .step-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .step-item {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--nd-blue);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* data requirement */
+  .data-req-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .data-req-box.zero { background: #eaf7ee; border: 1px solid #a8dbb8; }
+  .data-req-box.free { background: #fef9e6; border: 1px solid #e8d07a; }
+  .data-req-box.own  { background: #edf0f5; border: 1px solid #b8c5d4; }
+  .data-badge {
+    flex-shrink: 0;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    margin-top: 1px;
+  }
+  .badge-zero { background: #27ae60; color: #fff; }
+  .badge-free { background: #e0a800; color: #fff; }
+  .badge-own  { background: #7a8a9e; color: #fff; }
+
+  /* extension */
+  .extend-box {
+    background: #eef4fb;
+    border-left: 3px solid #2a7bbf;
+    border-radius: 0 8px 8px 0;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .extend-box strong { color: #1a5fa8; }
+
+  /* moment box (edu cards) */
+  .moment-box {
+    background: #f5eef8;
+    border-left: 3px solid #8e44ad;
+    border-radius: 0 8px 8px 0;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .moment-box strong { color: #6c3483; }
+
+  /* ingredient modal */
+  .ing-superpower {
+    background: #f0f8ff;
+    border: 1px solid #b8d8f0;
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #1a3a54;
+    font-style: italic;
+  }
+  .ing-long {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .used-in-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .used-in-chip {
+    display: inline-block;
+    font-size: 0.78rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 99px;
+    border: 1.5px solid var(--nd-blue);
+    color: var(--nd-blue);
+    font-weight: 600;
+    background: #f0f4f8;
+  }
+
+  /* chips row in modal */
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.3rem;
+  }
+  .chip {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.18rem 0.6rem;
+    border-radius: 20px;
+    border: 1.5px solid;
+  }
+  .chip-goal    { background: #fce8e6; color: #b33020; border-color: #e8a09a; }
+  .chip-vision  { background: #ede6fc; color: #5c30b3; border-color: #b89de6; }
+  .chip-web     { background: #e4f0fc; color: #1a5fa8; border-color: #8ab6e6; }
+  .chip-api     { background: #e2f8ed; color: #186840; border-color: #7dd4a8; }
+  .chip-corpus  { background: #fdf2d8; color: #8a5c00; border-color: #e8c87a; }
+  .chip-nlp     { background: #e2f7f3; color: #116653; border-color: #72cbb8; }
+  .chip-extract { background: #fdeede; color: #8a4010; border-color: #e8a55a; }
+  .chip-build   { background: #e8ecf0; color: #2a3e54; border-color: #8aa0b8; }
+
+  /* modal nav */
+  .modal-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.8rem;
+    border-top: 1px solid var(--gray-mid);
+    background: var(--gray-light);
+    border-radius: 0 0 16px 16px;
+  }
+  .nav-btn {
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    border: 2px solid var(--nd-blue);
+    background: var(--white);
+    color: var(--nd-blue);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .nav-btn:hover { background: var(--nd-blue); color: var(--white); }
+  .nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+  .modal-counter { font-size: 0.82rem; color: var(--gray-dark); font-weight: 600; }
+
+  .project-card.hidden { display: none; }
+
+  .modal::-webkit-scrollbar { width: 6px; }
+  .modal::-webkit-scrollbar-track { background: var(--gray-light); }
+  .modal::-webkit-scrollbar-thumb { background: var(--gray-mid); border-radius: 3px; }
+
+  /* QUICK START GUIDE */
+  .quick-start {
+    background: var(--white);
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    overflow: hidden;
+    border: 2px solid var(--gray-mid);
+    transition: border-color 0.2s;
+  }
+  .quick-start:hover {
+    border-color: var(--nd-gold);
+  }
+  .quick-start-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.3rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .quick-start-header:hover {
+    background: var(--gray-light);
+  }
+  .quick-start-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+  .quick-start-header h2 {
+    font-family: Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--nd-blue);
+    font-weight: bold;
+  }
+  .quick-start-subtitle {
+    font-size: 0.8rem;
+    color: #666;
+    font-style: italic;
+    white-space: nowrap;
+  }
+  .quick-start-summary {
+    display: flex;
+    gap: 1rem;
+    margin-left: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .quick-start-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gray-dark);
+  }
+  .quick-start-toggle {
+    margin-left: auto;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--nd-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+  .quick-start-toggle .arrow {
+    transition: transform 0.25s;
+    display: inline-block;
+  }
+  .quick-start.expanded .quick-start-toggle .arrow {
+    transform: rotate(180deg);
+  }
+  .quick-start-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 1.3rem;
+  }
+  .quick-start.expanded .quick-start-body {
+    max-height: 2000px;
+    overflow-y: auto;
+    padding: 0 1.3rem 1.3rem;
+  }
+  .qs-group {
+    margin-bottom: 1.2rem;
+  }
+  .qs-group:last-child {
+    margin-bottom: 0;
+  }
+  .qs-group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1.5px solid var(--gray-mid);
+  }
+  .qs-group-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .qs-group-header h3 {
+    font-family: Georgia, serif;
+    font-size: 0.92rem;
+    color: var(--nd-blue);
+    font-weight: bold;
+  }
+  .qs-group-count {
+    font-size: 0.72rem;
+    color: var(--gray-dark);
+    background: var(--gray-mid);
+    border-radius: 99px;
+    padding: 0.08rem 0.5rem;
+    font-weight: 600;
+  }
+  .qs-group-subtitle {
+    font-size: 0.78rem;
+    color: var(--gray-dark);
+    font-style: italic;
+    margin-left: auto;
+  }
+  .qs-project-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.5rem;
+  }
+  .qs-project-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--gray-light);
+    border: 1.5px solid transparent;
+  }
+  .qs-project-item:hover {
+    background: var(--white);
+    border-color: var(--nd-gold);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .qs-project-emoji {
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .qs-project-info {
+    min-width: 0;
+  }
+  .qs-project-title {
+    font-family: Georgia, serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--nd-blue);
+    line-height: 1.25;
+  }
+  .qs-project-discipline {
+    font-size: 0.72rem;
+    color: var(--gray-dark);
+    font-weight: 600;
+  }
+  .qs-project-arrow {
+    margin-left: auto;
+    color: var(--nd-gold);
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  /* DISCIPLINE SUBHEADINGS & JUMP-TO NAV */
+  .discipline-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+  .discipline-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: Calibri, 'Gill Sans', sans-serif;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--nd-blue);
+    background: var(--white);
+    border: 1.5px solid var(--gray-mid);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+  .discipline-nav-btn:hover {
+    border-color: var(--nd-gold);
+    background: #fffdf5;
+    color: var(--nd-blue);
+  }
+  .discipline-group {
+    margin-bottom: 1.5rem;
+  }
+  .discipline-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--gray-light);
+    scroll-margin-top: 5rem;
+  }
+  .discipline-heading-emoji {
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+  .discipline-heading h3 {
+    font-family: Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: var(--nd-blue);
+    margin: 0;
+  }
+  .discipline-heading .discipline-count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--nd-blue);
+    border-radius: 10px;
+    padding: 0.1rem 0.5rem;
+    margin-left: 0.3rem;
+  }
+
+  @media (max-width: 600px) {
+    main { padding: 1rem; }
+    header { padding: 1.5rem 1rem 1.2rem; }
+    header h1 { font-size: 1.4rem; }
+    .filter-bar { padding: 0.6rem 1rem; }
+    .modal-body { padding: 1.2rem; }
+    .modal-header { padding: 1.2rem 1.4rem 1rem; }
+    .modal-header h2 { font-size: 1.2rem; }
+    .quick-start-summary { display: none; }
+    .quick-start-subtitle { display: none; }
+    .quick-start-header h2 { font-size: 0.95rem; }
+    .qs-project-list { grid-template-columns: 1fr; }
+    .qs-group-subtitle { display: none; }
+    .discipline-nav-btn { font-size: 0.65rem; padding: 0.25rem 0.55rem; }
+    .discipline-heading h3 { font-size: 0.95rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="kicker">Gen AI in the Wild · Spring 2026 · University of Notre Dame</div>
+    <h1>Claude Code — Ingredients &amp; Recipes</h1>
+    <p class="subtitle">Eight capabilities. Fifty-one project recipes. Click any card to open the full recipe — what to say to Claude, what it will do, and what to watch for.</p>
+    <div class="header-meta">
+      <span>🧩 8 Ingredients</span>
+      <span>📋 11 Discipline Recipes</span>
+      <span>🎓 4 Understand AI</span>
+      <span>© 2026 · jbehrens@nd.edu</span>
+    </div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">Show:</span>
+    <button class="filter-btn active" data-filter="all">All 51</button>
+    <button class="filter-btn" data-filter="cat1">🧩 Ingredients (8)</button>
+    <button class="filter-btn" data-filter="cat2">📋 Discipline Recipes (39)</button>
+    <button class="filter-btn" data-filter="cat3">🎓 Understand AI (4)</button>
+  </div>
+</div>
+
+<main>
+  <div class="intro-box">
+    <strong>How to use this guide:</strong> The <strong>Ingredients</strong> describe what Claude can do that regular software cannot — click any card to learn more and see which recipes use it. The <strong>Discipline Recipes</strong> are tested project ideas for specific fields, each designed to use free, publicly accessible data. The <strong>Understand AI</strong> recipes use Claude to make the machinery of language models visible and interactive. Every project must use at least two ingredients with at least one AI-native capability.
+  </div>
+
+  <!-- QUICK START GUIDE -->
+  <div class="quick-start" id="quick-start-guide">
+    <div class="quick-start-header" id="quick-start-header">
+      <span class="quick-start-icon">🚀</span>
+      <h2>Quick Start Guide</h2>
+      <span class="quick-start-subtitle">Projects grouped by what you need to get started</span>
+      <div class="quick-start-summary" id="quick-start-summary"></div>
+      <div class="quick-start-toggle">
+        <span>Expand</span>
+        <span class="arrow">▾</span>
+      </div>
+    </div>
+    <div class="quick-start-body" id="quick-start-body"></div>
+  </div>
+
+  <!-- ── CATEGORY 1: INGREDIENTS ─────────────────────────── -->
+  <div class="category-section" id="section-cat1">
+    <div class="category-header">
+      <div class="category-dot" style="background:var(--cat1)"></div>
+      <h2>🧩 Ingredients — What Claude Can Do</h2>
+      <span class="category-count">8</span>
+      <span class="category-sub">At least one AI-native ingredient required in every project</span>
+    </div>
+    <div class="cards-grid" id="cards-cat1"></div>
+  </div>
+
+  <!-- ── CATEGORY 2: DISCIPLINE RECIPES ─────────────────── -->
+  <div class="category-section" id="section-cat2">
+    <div class="category-header">
+      <div class="category-dot" style="background:var(--cat2)"></div>
+      <h2>📋 Discipline Recipes</h2>
+      <span class="category-count">39</span>
+      <span class="category-sub">All use verified free, publicly accessible data sources</span>
+    </div>
+
+    <div class="discipline-nav" id="discipline-nav"></div>
+    <div id="cards-cat2"></div>
+  </div>
+
+  <!-- ── CATEGORY 3: UNDERSTAND AI ──────────────────────── -->
+  <div class="category-section" id="section-cat3">
+    <div class="category-header">
+      <div class="category-dot" style="background:var(--cat3)"></div>
+      <h2>🎓 Understand AI — The Subject is Claude Itself</h2>
+      <span class="category-count">4</span>
+      <span class="category-sub">Build tools that make the invisible machinery of language models visible</span>
+    </div>
+    <div class="cards-grid" id="cards-cat3"></div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-kicker" id="modal-kicker"></div>
+      <h2 id="modal-title"></h2>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-nav">
+      <button class="nav-btn" id="nav-prev">← Prev</button>
+      <span class="modal-counter" id="modal-counter"></span>
+      <button class="nav-btn" id="nav-next">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script src="claude_code_recipes_data.js"></script>
+<script>
+// =============================================
+// STATE
+// =============================================
+let currentId = null;
+let filteredIds = projects.map(p => p.id);
+
+// =============================================
+// DYNAMIC CARD RENDERING
+// =============================================
+function renderCardHTML(p) {
+  const num = String(p.id).padStart(2, '0');
+  let tagClass, tagText, dotHTML = '';
+
+  if (p.cat === 'cat1') {
+    tagClass = 'tag-ing';
+    tagText = 'AI-Native';
+  } else if (p.cat === 'cat3') {
+    tagClass = 'tag-edu';
+    tagText = 'Understand AI';
+    const dotClass = p.dataReq ? 'dot-' + p.dataReq.type : 'dot-zero';
+    const dotTitle = p.dataReq
+      ? { zero: 'Zero barrier', free: 'Free registration', own: 'Bring your own data' }[p.dataReq.type]
+      : 'Zero barrier';
+    dotHTML = '<div class="data-dot ' + dotClass + '" title="' + dotTitle + '"></div>';
+  } else {
+    tagClass = 'tag-discipline';
+    tagText = p.discipline || 'Recipe';
+    const dotClass = p.dataReq ? 'dot-' + p.dataReq.type : 'dot-zero';
+    const dotTitle = p.dataReq
+      ? { zero: 'Zero barrier', free: 'Free registration', own: 'Bring your own data' }[p.dataReq.type]
+      : 'Zero barrier';
+    dotHTML = '<div class="data-dot ' + dotClass + '" title="' + dotTitle + '"></div>';
+  }
+
+  return '<div class="project-card" data-id="' + p.id + '" data-cat="' + p.cat + '">' +
+    '<span class="card-number">' + num + '</span>' +
+    '<div class="card-top">' +
+      '<span class="card-emoji">' + p.emoji + '</span>' +
+      '<div class="card-title">' + p.title + '</div>' +
+    '</div>' +
+    '<div class="card-desc">' + p.desc + '</div>' +
+    '<div class="card-footer">' +
+      '<span class="tag ' + tagClass + '">' + tagText + '</span>' +
+      dotHTML +
+      '<span class="card-arrow">→</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderCards() {
+  // --- Cat1: flat grid ---
+  var cat1Container = document.getElementById('cards-cat1');
+  var cat1Projects = projects.filter(function(p) { return p.cat === 'cat1'; });
+  cat1Container.innerHTML = cat1Projects.map(renderCardHTML).join('');
+
+  // --- Cat2: grouped by discipline ---
+  var cat2Container = document.getElementById('cards-cat2');
+  var navContainer = document.getElementById('discipline-nav');
+  var cat2Projects = projects.filter(function(p) { return p.cat === 'cat2'; });
+
+  // Build jump-to nav
+  var navHTML = '';
+  disciplineOrder.forEach(function(d) {
+    var hasCards = cat2Projects.some(function(p) { return p.discipline === d.name; });
+    if (hasCards) {
+      navHTML += '<a href="#' + d.anchor + '" class="discipline-nav-btn">' + d.emoji + ' ' + d.name + '</a>';
+    }
+  });
+  navContainer.innerHTML = navHTML;
+
+  // Build discipline groups
+  var groupsHTML = '';
+  disciplineOrder.forEach(function(d) {
+    var cards = cat2Projects.filter(function(p) { return p.discipline === d.name; });
+    if (cards.length === 0) return;
+    groupsHTML += '<div class="discipline-group">' +
+      '<div class="discipline-heading" id="' + d.anchor + '">' +
+        '<span class="discipline-heading-emoji">' + d.emoji + '</span>' +
+        '<h3>' + d.name + '</h3>' +
+        '<span class="discipline-count">' + cards.length + '</span>' +
+      '</div>' +
+      '<div class="cards-grid">' + cards.map(renderCardHTML).join('') + '</div>' +
+    '</div>';
+  });
+  cat2Container.innerHTML = groupsHTML;
+
+  // --- Cat3: flat grid ---
+  var cat3Container = document.getElementById('cards-cat3');
+  var cat3Projects = projects.filter(function(p) { return p.cat === 'cat3'; });
+  cat3Container.innerHTML = cat3Projects.map(renderCardHTML).join('');
+
+  // Update filter button counts
+  var allBtn = document.querySelector('[data-filter="all"]');
+  if (allBtn) allBtn.textContent = 'All ' + projects.length;
+  var cat1Btn = document.querySelector('[data-filter="cat1"]');
+  if (cat1Btn) cat1Btn.innerHTML = '🧱 Prompt Ingredients (' + cat1Projects.length + ')';
+  var cat2Btn = document.querySelector('[data-filter="cat2"]');
+  if (cat2Btn) cat2Btn.innerHTML = '📋 Discipline Recipes (' + cat2Projects.length + ')';
+  var cat3Btn = document.querySelector('[data-filter="cat3"]');
+  if (cat3Btn) cat3Btn.innerHTML = '🎓 Understand AI (' + cat3Projects.length + ')';
+
+  // Update category count badges
+  var cat1Count = document.querySelector('#section-cat1 .category-count');
+  if (cat1Count) cat1Count.textContent = cat1Projects.length;
+  var cat2Count = document.querySelector('#section-cat2 .category-count');
+  if (cat2Count) cat2Count.textContent = cat2Projects.length;
+  var cat3Count = document.querySelector('#section-cat3 .category-count');
+  if (cat3Count) cat3Count.textContent = cat3Projects.length;
+}
+
+// Render all cards on load
+renderCards();
+
+// =============================================
+// CHIP LABELS → CSS CLASSES
+// =============================================
+const chipDefs = {
+  goal:    { label: 'Goal-Pursuit',          cls: 'chip-goal' },
+  vision:  { label: 'Vision',                cls: 'chip-vision' },
+  web:     { label: 'Live Web Search',       cls: 'chip-web' },
+  api:     { label: 'API Integration',       cls: 'chip-api' },
+  corpus:  { label: 'Corpus Reading',        cls: 'chip-corpus' },
+  nlp:     { label: 'NLP & Text',            cls: 'chip-nlp' },
+  extract: { label: 'Structured Extraction', cls: 'chip-extract' },
+  build:   { label: 'Interface Building',    cls: 'chip-build' }
+};
+
+function renderChips(chips) {
+  return chips.map(c => {
+    const d = chipDefs[c];
+    return d ? `<span class="chip ${d.cls}">${d.label}</span>` : '';
+  }).join('');
+}
+
+// =============================================
+// RENDER MODAL
+// =============================================
+function renderModal(project) {
+  document.getElementById('modal-title').textContent = project.title;
+
+  if (project.type === 'ingredient') {
+    document.getElementById('modal-kicker').textContent = '🧩 Ingredient — ' + project.cat.replace('cat', 'Category ');
+    document.getElementById('modal-body').innerHTML = `
+      <div class="recipe-section">
+        <div class="recipe-section-header">
+          <span class="recipe-section-icon">⚡</span>
+          <h3>What Makes This Different</h3>
+        </div>
+        <div class="ing-superpower">${project.superpower}</div>
+      </div>
+      <div class="recipe-section">
+        <div class="recipe-section-header">
+          <span class="recipe-section-icon">📖</span>
+          <h3>What It Is</h3>
+        </div>
+        <p class="ing-long">${project.long}</p>
+      </div>
+      <div class="recipe-section">
+        <div class="recipe-section-header">
+          <span class="recipe-section-icon">🔗</span>
+          <h3>Used In These Recipes</h3>
+        </div>
+        <div class="used-in-list">
+          ${project.usedIn.map(r => `<span class="used-in-chip">${r}</span>`).join('')}
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const badgeClass = { zero: 'badge-zero', free: 'badge-free', own: 'badge-own' }[project.dataReq.type];
+  const badgeLabel = { zero: 'Zero Barrier', free: 'Free Registration', own: 'Bring Your Own' }[project.dataReq.type];
+  const boxClass   = project.dataReq.type;
+
+  let kicker = '';
+  if (project.type === 'recipe') kicker = `📋 ${project.discipline}`;
+  if (project.type === 'edu')    kicker = '🎓 Understand AI';
+  document.getElementById('modal-kicker').textContent = kicker;
+
+  const chipsHtml = project.chips ? `<div class="chips-row" style="margin-bottom:1rem;">${renderChips(project.chips)}</div>` : '';
+
+  const chainSteps = project.chain.map((step, i) =>
+    `<li class="step-item"><span class="step-num">${i+1}</span><span>${step}</span></li>`
+  ).join('');
+
+  const momentSection = project.moment ? `
+    <div class="recipe-section">
+      <div class="recipe-section-header">
+        <span class="recipe-section-icon">✨</span>
+        <h3>The Moment</h3>
+      </div>
+      <div class="moment-box">${project.moment}</div>
+    </div>` : '';
+
+  document.getElementById('modal-body').innerHTML = `
+    ${chipsHtml}
+    <div class="recipe-section">
+      <div class="recipe-section-header">
+        <span class="recipe-section-icon">💬</span>
+        <h3>Prompt to Try</h3>
+      </div>
+      <div class="prompt-block">${project.prompt}</div>
+    </div>
+    <div class="recipe-section">
+      <div class="recipe-section-header">
+        <span class="recipe-section-icon">🔗</span>
+        <h3>What Claude Does Step by Step</h3>
+      </div>
+      <ul class="step-list">${chainSteps}</ul>
+    </div>
+    <div class="recipe-section">
+      <div class="recipe-section-header">
+        <span class="recipe-section-icon">💾</span>
+        <h3>Data Required</h3>
+      </div>
+      <div class="data-req-box ${boxClass}">
+        <span class="data-badge ${badgeClass}">${badgeLabel}</span>
+        <span>${project.dataReq.text}</span>
+      </div>
+    </div>
+    <div class="recipe-section">
+      <div class="recipe-section-header">
+        <span class="recipe-section-icon">🚀</span>
+        <h3>Try Next</h3>
+      </div>
+      <div class="extend-box"><strong>Next step:</strong> ${project.extend}</div>
+    </div>
+    ${momentSection}
+  `;
+}
+
+// =============================================
+// OPEN / CLOSE
+// =============================================
+function openModal(id) {
+  const project = projects.find(p => p.id === Number(id));
+  if (!project) return;
+  currentId = Number(id);
+  renderModal(project);
+
+  const idx = filteredIds.indexOf(currentId);
+  document.getElementById('nav-prev').disabled = idx === 0;
+  document.getElementById('nav-next').disabled = idx === filteredIds.length - 1;
+  document.getElementById('modal-counter').textContent = `${idx + 1} of ${filteredIds.length}`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('modal').scrollTop = 0;
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentId = null;
+}
+
+// =============================================
+// EVENT LISTENERS
+// =============================================
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('click', () => openModal(card.dataset.id));
+});
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+
+document.getElementById('nav-prev').addEventListener('click', () => {
+  const idx = filteredIds.indexOf(currentId);
+  if (idx > 0) openModal(filteredIds[idx - 1]);
+});
+
+document.getElementById('nav-next').addEventListener('click', () => {
+  const idx = filteredIds.indexOf(currentId);
+  if (idx < filteredIds.length - 1) openModal(filteredIds[idx + 1]);
+});
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modal-overlay').classList.contains('open')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowLeft') document.getElementById('nav-prev').click();
+  if (e.key === 'ArrowRight') document.getElementById('nav-next').click();
+});
+
+// =============================================
+// FILTER
+// =============================================
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+
+    document.querySelectorAll('.project-card').forEach(card => {
+      const show = filter === 'all' || card.dataset.cat === filter;
+      card.classList.toggle('hidden', !show);
+    });
+
+    // hide empty discipline groups
+    document.querySelectorAll('.discipline-group').forEach(group => {
+      const hasVisible = [...group.querySelectorAll('.project-card')]
+        .some(c => !c.classList.contains('hidden'));
+      group.classList.toggle('hidden', !hasVisible);
+    });
+
+    // hide discipline nav when not showing cat2
+    const discNav = document.querySelector('.discipline-nav');
+    if (discNav) {
+      discNav.classList.toggle('hidden', filter !== 'all' && filter !== 'cat2');
+    }
+
+    // hide empty sections
+    document.querySelectorAll('.category-section').forEach(section => {
+      const catId = section.id.replace('section-', '');
+      const hasVisible = [...section.querySelectorAll('.project-card')]
+        .some(c => !c.classList.contains('hidden'));
+      section.classList.toggle('hidden', !hasVisible);
+    });
+
+    // rebuild filtered nav list
+    filteredIds = projects
+      .filter(p => filter === 'all' || p.cat === filter)
+      .map(p => p.id);
+  });
+});
+
+// =============================================
+// QUICK START GUIDE
+// =============================================
+(function buildQuickStartGuide() {
+  const recipeProjects = projects.filter(p => p.type === 'recipe' || p.type === 'edu');
+
+  const groups = {
+    zero: {
+      label: 'Zero Barrier',
+      subtitle: 'Start immediately \u2014 no data, no registration',
+      dotColor: '#27ae60',
+      projects: []
+    },
+    free: {
+      label: 'Free Registration',
+      subtitle: 'Free API key or account required (2\u20135 minutes)',
+      dotColor: '#e0a800',
+      projects: []
+    },
+    own: {
+      label: 'Bring Your Own Data',
+      subtitle: 'You supply a dataset (your own files or free download)',
+      dotColor: '#7a8a9e',
+      projects: []
+    }
+  };
+
+  recipeProjects.forEach(p => {
+    if (groups[p.dataReq.type]) {
+      groups[p.dataReq.type].projects.push(p);
+    }
+  });
+
+  // Summary stats in header
+  const summaryEl = document.getElementById('quick-start-summary');
+  summaryEl.innerHTML = Object.entries(groups).map(([key, g]) =>
+    `<span class="quick-start-stat">
+       <span class="data-dot dot-${key}"></span>
+       ${g.projects.length} ${g.label.toLowerCase()}
+     </span>`
+  ).join('');
+
+  // Expandable body with three groups
+  const bodyEl = document.getElementById('quick-start-body');
+  bodyEl.innerHTML = Object.entries(groups).map(([key, g]) => {
+    const items = g.projects.map(p => {
+      const discipline = p.discipline || 'Understand AI';
+      return `<div class="qs-project-item" data-id="${p.id}">
+        <span class="qs-project-emoji">${p.emoji}</span>
+        <div class="qs-project-info">
+          <div class="qs-project-title">${p.title}</div>
+          <div class="qs-project-discipline">${discipline}</div>
+        </div>
+        <span class="qs-project-arrow">&rarr;</span>
+      </div>`;
+    }).join('');
+
+    return `<div class="qs-group">
+      <div class="qs-group-header">
+        <div class="qs-group-dot" style="background:${g.dotColor}"></div>
+        <h3>${g.label}</h3>
+        <span class="qs-group-count">${g.projects.length}</span>
+        <span class="qs-group-subtitle">${g.subtitle}</span>
+      </div>
+      <div class="qs-project-list">${items}</div>
+    </div>`;
+  }).join('');
+
+  // Toggle expand/collapse
+  const guideEl = document.getElementById('quick-start-guide');
+  const headerEl = document.getElementById('quick-start-header');
+  const toggleLabel = headerEl.querySelector('.quick-start-toggle span:first-child');
+
+  headerEl.addEventListener('click', () => {
+    const isExpanded = guideEl.classList.toggle('expanded');
+    toggleLabel.textContent = isExpanded ? 'Collapse' : 'Expand';
+  });
+
+  // Click project item → reset filter to All → open modal
+  bodyEl.querySelectorAll('.qs-project-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+      if (!allBtn.classList.contains('active')) {
+        allBtn.click();
+      }
+      openModal(item.dataset.id);
+    });
+  });
+})();
+</script>
+</body>
+</html>
