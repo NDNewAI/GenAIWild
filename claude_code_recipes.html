@@ -514,6 +514,9 @@
   .chip-nlp     { background: #e2f7f3; color: #116653; border-color: #72cbb8; }
   .chip-extract { background: #fdeede; color: #8a4010; border-color: #e8a55a; }
   .chip-build   { background: #e8ecf0; color: #2a3e54; border-color: #8aa0b8; }
+  .chip-export  { background: #f0e6f6; color: #6b2fa0; border-color: #c9a0e6; }
+  .chip-viz3d   { background: #e0f2fe; color: #0c4a6e; border-color: #7dd3fc; }
+  .chip-sim     { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
 
   /* modal nav */
   .modal-nav {
@@ -810,10 +813,10 @@
   <div class="header-inner">
     <div class="kicker">Gen AI in the Wild · Spring 2026 · University of Notre Dame</div>
     <h1>Claude Code — Ingredients &amp; Recipes</h1>
-    <p class="subtitle">Eight capabilities. Fifty-one project recipes. Click any card to open the full recipe — what to say to Claude, what it will do, and what to watch for.</p>
+    <p class="subtitle">Eleven capabilities. Forty-three project recipes. Click any card to open the full recipe — what to say to Claude, what it will do, and what to watch for.</p>
     <div class="header-meta">
-      <span>🧩 8 Ingredients</span>
-      <span>📋 11 Discipline Recipes</span>
+      <span>🧩 11 Ingredients</span>
+      <span>📋 39 Discipline Recipes</span>
       <span>🎓 4 Understand AI</span>
       <span>© 2026 · jbehrens@nd.edu</span>
     </div>
@@ -1030,7 +1033,10 @@ const chipDefs = {
   corpus:  { label: 'Corpus Reading',        cls: 'chip-corpus' },
   nlp:     { label: 'NLP & Text',            cls: 'chip-nlp' },
   extract: { label: 'Structured Extraction', cls: 'chip-extract' },
-  build:   { label: 'Interface Building',    cls: 'chip-build' }
+  build:   { label: 'Interface Building',    cls: 'chip-build' },
+  export:  { label: 'File & Format Export',  cls: 'chip-export' },
+  viz3d:   { label: '3D Visualization',      cls: 'chip-viz3d' },
+  sim:     { label: 'Simulation',            cls: 'chip-sim' }
 };
 
 function renderChips(chips) {

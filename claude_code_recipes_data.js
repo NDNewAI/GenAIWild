@@ -88,6 +88,30 @@ const projects = [
     long: 'Claude can write and run code to produce persistent artifacts: an HTML/JS dashboard you open in a browser, a Python script that runs on your computer, a tool that others can use. This is the ingredient that distinguishes Claude Code from Claude chat — the conversation produces a working file that exists after the session ends.',
     usedIn: ['All recipes']
   },
+  {
+    id: 52, cat: 'cat1', type: 'ingredient',
+    emoji: '📁', title: 'File & Format Export',
+    desc: 'Generate Excel spreadsheets, PowerPoint decks, CSVs, PDFs, and other file formats.',
+    superpower: 'Claude writes code that creates formatted files — .xlsx with multiple sheets, .pptx with slides, .csv, .pdf — ready to open or share.',
+    long: 'Claude Code can generate files in standard business and academic formats. Need a spreadsheet with charts? A slide deck summarizing results? A CSV for import into SPSS or R? Claude writes the code to produce these files directly. The output is a real file on your computer, not a preview — you can email it, upload it to Canvas, or open it in Excel or PowerPoint.',
+    usedIn: ['Cognitive Experiment Builder', 'End-to-End Analysis Pipeline', 'Signal Processing Workbench', 'Retirement Monte Carlo Simulator', 'Regression Diagnostic Dashboard']
+  },
+  {
+    id: 53, cat: 'cat1', type: 'ingredient',
+    emoji: '🧊', title: '3D Visualization',
+    desc: 'Build interactive 3D scenes, models, and walkthroughs that run in the browser.',
+    superpower: 'Claude generates Three.js code that renders 3D objects, cameras, lighting, and interaction — all in a single HTML file.',
+    long: 'Claude can build interactive 3D visualizations using Three.js — a JavaScript library for browser-based 3D graphics. You describe what you want to see and Claude produces a working HTML file with orbitable cameras, lighting, materials, and animation. No software installation required — it runs in any browser. Used for architectural walkthroughs, mechanical part design, terrain generation, physics simulations, and games.',
+    usedIn: ['Options Pricing Workbench', '3D Floor Plan Visualizer', 'Structural Load Visualizer', 'Parametric Building Facade Generator', '3D Maze Game', 'Procedural Terrain Generator', '3D Physics Sandbox', 'Parametric Mechanical Part Designer', '3D Assembly Exploded View', '3D Print Slicer Visualizer']
+  },
+  {
+    id: 54, cat: 'cat1', type: 'ingredient',
+    emoji: '🧮', title: 'Simulation & Computation',
+    desc: 'Run Monte Carlo simulations, physics engines, statistical models, and algorithmic experiments.',
+    superpower: 'Claude writes and runs code that simulates complex systems — thousands of scenarios, physical forces, probability distributions — and visualizes the results.',
+    long: 'Claude can write code that runs computational experiments: Monte Carlo simulations with thousands of randomized trials, physics engines with gravity and collisions, statistical models across multiple distributions, and algorithmic races that compare performance. The results are not hypothetical — Claude runs the code and shows you the output. This makes abstract concepts in finance, statistics, physics, and computer science something you can watch and interact with.',
+    usedIn: ['Game Theory Tournament Simulator', 'Retirement Monte Carlo Simulator', 'Probability Distribution Explorer', 'Algorithm Race Visualizer', 'Structural Load Visualizer', 'Procedural Terrain Generator', '3D Physics Sandbox']
+  },
 
   // ── DISCIPLINE RECIPES ────────────────────────────────────────────
 
@@ -96,7 +120,7 @@ const projects = [
     emoji: '🧪', title: 'Cognitive Experiment Builder',
     discipline: 'Psychology',
     desc: 'Build a real browser-based Stroop task with response timing and data export.',
-    chips: ['goal', 'build', 'extract'],
+    chips: ['goal', 'build', 'extract', 'export'],
     dataReq: { type: 'zero', text: 'No data needed. Claude generates the experiment from scratch.' },
     prompt: '"I need to run a classic Stroop task experiment for my cognitive psychology class. Build me a browser-based experiment with proper randomization, millisecond response timing, and a CSV file of results I can analyze. The interface should feel clean and professional."',
     chain: [
@@ -160,7 +184,7 @@ const projects = [
     emoji: '📊', title: 'End-to-End Analysis Pipeline',
     discipline: 'Statistics',
     desc: 'Claude finds a dataset, checks quality, runs regression, visualizes, and interprets.',
-    chips: ['goal', 'api', 'build', 'extract'],
+    chips: ['goal', 'api', 'build', 'extract', 'export'],
     dataReq: { type: 'zero', text: 'Claude finds and fetches data from UCI ML Repository or government open data portals. You bring no data.' },
     prompt: '"I need to teach my classmates about multiple linear regression using a real, compelling dataset. Find an appropriate public dataset, check it for quality issues, confirm your choice with me, run the analysis, build an interactive visualization where we can adjust variables and see how the model changes, and write an interpretation in plain language."',
     chain: [
@@ -208,7 +232,7 @@ const projects = [
     emoji: '⚡', title: 'Signal Processing Workbench',
     discipline: 'Electrical Engineering',
     desc: 'Build an interactive browser tool for filtering, FFT, and anomaly detection on sensor data.',
-    chips: ['goal', 'build', 'extract'],
+    chips: ['goal', 'build', 'extract', 'export'],
     dataReq: { type: 'own', text: 'Any CSV of sensor readings from lab work. No access issues — this is your own data. Or use any public IoT dataset from Kaggle free tier.' },
     prompt: '"Build me an interactive signal processing workbench. I should be able to load a CSV of sensor readings, apply different filters (Butterworth, Kalman, moving average) with adjustable parameters, run FFT to see the frequency spectrum, compare filtered vs. raw signals side by side, and save filtered outputs as new files."',
     chain: [
@@ -393,7 +417,7 @@ const projects = [
     emoji: '🎲', title: 'Game Theory Tournament Simulator',
     discipline: 'Economics',
     desc: 'Run prisoner\'s dilemma tournaments with classic strategies and custom ones you describe in English.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Pure computation — all strategies are code.' },
     prompt: '"Build me an interactive prisoner\'s dilemma tournament for my game theory class. I should be able to define strategies (always cooperate, always defect, tit-for-tat, random, grudger, pavlov) and run round-robin tournaments of any length. Show a live leaderboard, round-by-round history, and a heatmap of how each strategy performs against every other. Let me create a custom strategy by describing it in plain English."',
     chain: [
@@ -411,7 +435,7 @@ const projects = [
     emoji: '📊', title: 'Options Pricing Workbench',
     discipline: 'Finance',
     desc: 'Interactive Black-Scholes calculator with Greeks, 3D surfaces, and multi-leg strategy P&L.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim', 'viz3d'],
     dataReq: { type: 'zero', text: 'No data needed. Black-Scholes is pure mathematics.' },
     prompt: '"Build me an interactive Black-Scholes options pricing calculator. I enter underlying price, strike, time to expiration, risk-free rate, and volatility. Show call/put prices, all five Greeks (delta, gamma, theta, vega, rho) with visual gauges, and an interactive 3D surface plot of how option price varies with underlying price and volatility simultaneously. Add P&L diagrams for four strategies: covered call, protective put, straddle, iron condor — with parameters I can set."',
     chain: [
@@ -427,7 +451,7 @@ const projects = [
     emoji: '🏦', title: 'Retirement Monte Carlo Simulator',
     discipline: 'Finance',
     desc: 'Visualize compound growth and run 1,000 randomized retirement scenarios as a fan chart.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim', 'export'],
     dataReq: { type: 'zero', text: 'No data needed. Uses historical return distributions built into the model.' },
     prompt: '"Build me a retirement planning visualizer. I enter my age, current savings, monthly contribution, expected return, and target retirement age. Show a year-by-year growth chart with compound interest visible. Add a Monte Carlo mode that runs 1,000 scenarios with randomized returns based on historical S&P 500 distribution, displayed as a fan chart showing 10th/25th/50th/75th/90th percentile outcomes. Include an inflation-adjusted view."',
     chain: [
@@ -445,7 +469,7 @@ const projects = [
     emoji: '🔬', title: 'A/B Test Significance Calculator',
     discipline: 'Business Analytics',
     desc: 'Enter two conversion rates — see p-values, power, and a simulation of why peeking is dangerous.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. You enter the numbers manually or use preset examples.' },
     prompt: '"Build me an A/B test significance calculator for my marketing analytics class. I enter sample sizes and conversion rates for two groups. Show p-value, confidence interval, statistical power, minimum detectable effect, and recommended sample size — all with clear visualizations. Include a simulation mode where I watch the p-value evolve as more data comes in, demonstrating why you shouldn\'t peek at results early. Preload three realistic marketing scenarios."',
     chain: [
@@ -479,7 +503,7 @@ const projects = [
     emoji: '📈', title: 'Probability Distribution Explorer',
     discipline: 'Statistics',
     desc: 'Adjust parameters of 7 distributions in real time and watch the Central Limit Theorem happen.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Pure mathematical visualization.' },
     prompt: '"Build me an interactive probability distribution explorer. Include Normal, t, Chi-squared, F, Binomial, Poisson, and Exponential. For each, I adjust parameters with sliders and see the PDF/CDF update in real time. Add shading for p-values and critical regions. Include a Central Limit Theorem demonstrator: I pick any source distribution, set a sample size, and watch the sampling distribution of the mean become normal as I increase the number of samples."',
     chain: [
@@ -495,7 +519,7 @@ const projects = [
     emoji: '🔍', title: 'Regression Diagnostic Dashboard',
     discipline: 'Statistics',
     desc: 'Upload a CSV, run regression, and get all four diagnostic plots with interactive outlier removal.',
-    chips: ['build', 'goal', 'extract'],
+    chips: ['build', 'goal', 'extract', 'export'],
     dataReq: { type: 'own', text: 'Any CSV dataset — or use the built-in sample datasets (Boston housing, mtcars, iris).' },
     prompt: '"Build me a regression diagnostic tool I can open in a browser. I upload a CSV, pick dependent and independent variables, and it runs multiple linear regression. Show not just results but all diagnostic plots: residuals vs fitted, QQ plot, scale-location, Cook\'s distance. Highlight influential points or assumption violations in red. Let me remove outliers with one click and rerun, showing before/after comparison of how the model changes."',
     chain: [
@@ -547,7 +571,7 @@ const projects = [
     emoji: '🏁', title: 'Algorithm Race Visualizer',
     discipline: 'Computer Science',
     desc: 'Animate sorting and pathfinding algorithms step-by-step, with a head-to-head race mode.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Algorithms run on generated arrays and graphs.' },
     prompt: '"Build me an interactive algorithm visualizer. Include sorting (bubble, merge, quick, heap) and pathfinding (BFS, DFS, Dijkstra, A*). Each algorithm animates step-by-step with adjustable speed. Show time and space complexity, highlight the current operation, and let me pause and step manually. Include a race mode where two sorting algorithms compete on the same random array, and a maze generator for pathfinding demos."',
     chain: [
@@ -581,7 +605,7 @@ const projects = [
     emoji: '⚡', title: 'Circuit Simulator',
     discipline: 'Electrical Engineering',
     desc: 'Place components on a grid, solve DC/AC circuits, and watch animated current flow.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Circuit analysis is pure computation.' },
     prompt: '"Build me a browser-based DC/AC circuit simulator. I place components on a grid — resistors, capacitors, inductors, voltage sources, op-amps — and connect them. Calculate and display node voltages and branch currents. For AC circuits, show the Bode plot (magnitude and phase). Include presets: voltage divider, RC low-pass filter, RLC resonant circuit, inverting amplifier. Animate current flow direction and magnitude with moving dots."',
     chain: [
@@ -667,7 +691,7 @@ const projects = [
     emoji: '🏠', title: '3D Floor Plan Visualizer',
     discipline: 'Architecture',
     desc: 'Describe a floor plan in English — get a 3D walkthrough with furniture and camera modes.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d'],
     dataReq: { type: 'zero', text: 'No data needed. Describe the floor plan in plain English.' },
     prompt: '"I\'ll describe a simple building floor plan in plain English — rooms, approximate dimensions, door and window placements. Build me a 3D walkthrough visualization using Three.js that I can rotate, zoom, and orbit. Render walls, floors, doors, and windows with basic materials. Add a furniture placement mode where I describe what goes in each room and you add 3D representations. Include a toggle between bird\'s-eye view and first-person perspective."',
     chain: [
@@ -683,7 +707,7 @@ const projects = [
     emoji: '🏗️', title: 'Structural Load Visualizer',
     discipline: 'Architecture',
     desc: '3D beam and truss analyzer — apply loads, see deformation, color-code stress levels.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Structural analysis is pure computation.' },
     prompt: '"Build me an interactive 3D beam and truss analyzer using Three.js. I define a simple structure by placing nodes in 3D space and connecting them with beams. I apply point loads and distributed loads by clicking. Show the deformed shape (exaggerated for visibility), color-code members by stress level (green=safe, yellow=approaching limit, red=exceeds), and display reaction forces at supports. Include presets: simply supported beam, cantilever, Warren truss, Pratt truss."',
     chain: [
@@ -699,7 +723,7 @@ const projects = [
     emoji: '🏛️', title: 'Parametric Building Facade Generator',
     discipline: 'Architecture',
     desc: 'Adjust sliders to generate infinite facade variations in 3D with material and solar overlays.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d'],
     dataReq: { type: 'zero', text: 'No data needed. Parametric design is pure geometry.' },
     prompt: '"Build me a 3D parametric facade generator using Three.js for my architecture studio. I adjust parameters with sliders: building width, height, number of floors, window-to-wall ratio, column spacing, balcony depth, and a randomization seed for organic variation. The facade renders in real-time 3D. Include material options (glass, concrete, brick, wood) with distinct visual styles. Let me toggle a solar analysis overlay that color-codes the facade by estimated sun exposure based on orientation."',
     chain: [
@@ -717,7 +741,7 @@ const projects = [
     emoji: '🎮', title: '3D Maze Game',
     discipline: 'Game Development',
     desc: 'First-person 3D maze with fog, collectibles, timer, and persistent high scores.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Mazes are procedurally generated.' },
     prompt: '"Build me a complete 3D first-person maze game using Three.js that runs in the browser. Generate a random maze each time using a recursive backtracker algorithm. I navigate with WASD and mouse look. Add a minimap in the corner, a timer, collectible items scattered through the maze, fog that limits visibility, and a best-times leaderboard stored in localStorage. Include 3 difficulty levels affecting maze size."',
     chain: [
@@ -733,7 +757,7 @@ const projects = [
     emoji: '🏔️', title: 'Procedural Terrain Generator',
     discipline: 'Game Development',
     desc: 'Generate 3D landscapes with noise algorithms — adjust roughness, water, mountains, and weather.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Terrain is generated mathematically.' },
     prompt: '"Build me an interactive 3D procedural terrain generator using Three.js. Use Perlin or simplex noise to generate realistic landscapes. I should have sliders for: terrain roughness, water level, mountain height, erosion, and vegetation density. Render with realistic coloring — snow on peaks, green valleys, sandy beaches, blue water. Include a day/night cycle with a moving sun that casts shadows. Let me export a screenshot."',
     chain: [
@@ -749,7 +773,7 @@ const projects = [
     emoji: '🎱', title: '3D Physics Sandbox',
     discipline: 'Game Development',
     desc: 'Spawn objects with different physics properties — build towers, launch projectiles, trigger chain reactions.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Physics simulation is pure mathematics.' },
     prompt: '"Build me a 3D physics playground using Three.js with a simple physics engine. I spawn objects (cubes, spheres, cylinders) with different masses, sizes, and materials (bouncy, heavy, sticky). I can drop them, throw them, and build towers. Include a cannon that launches projectiles at adjustable angles and velocities. Add gravity controls, slow-motion mode, and a Rube Goldberg preset that demonstrates a chain reaction."',
     chain: [
@@ -767,7 +791,7 @@ const projects = [
     emoji: '⚙️', title: 'Parametric Mechanical Part Designer',
     discipline: 'CAD / Mechanical Engineering',
     desc: 'Create and combine 3D shapes with boolean operations — preset mechanical parts included.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d'],
     dataReq: { type: 'zero', text: 'No data needed. Parts are designed from dimensional parameters.' },
     prompt: '"Build me a browser-based parametric 3D part designer using Three.js. I create basic shapes (box, cylinder, sphere, cone, torus) and combine them using boolean operations (union, subtract, intersect). Each dimension is adjustable with number inputs or sliders. Show a dimensioned wireframe overlay. Include preset templates: bolt, nut, gear, bracket, pipe fitting. Let me orbit, zoom, and toggle between solid, wireframe, and transparent views."',
     chain: [
@@ -783,7 +807,7 @@ const projects = [
     emoji: '🔧', title: '3D Assembly Exploded View',
     discipline: 'CAD / Mechanical Engineering',
     desc: 'Describe a mechanism — get a 3D model with explode slider, labels, and step-by-step assembly animation.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d'],
     dataReq: { type: 'zero', text: 'No data needed. Describe the assembly in plain English.' },
     prompt: '"Build me a 3D assembly visualizer using Three.js. I describe a multi-part mechanical assembly (like a simple gear train, a pen, or a door hinge) and you build a 3D model of each part. Add an \'explode\' slider that smoothly separates all parts along their assembly axis so I can see how they fit together. Include labels for each part, a bill of materials table, and an animation that shows the assembly sequence step by step."',
     chain: [
@@ -799,7 +823,7 @@ const projects = [
     emoji: '🖨️', title: '3D Print Slicer Visualizer',
     discipline: 'CAD / Mechanical Engineering',
     desc: 'Describe an object — see it sliced layer-by-layer with infill patterns, supports, and cost estimates.',
-    chips: ['build', 'goal'],
+    chips: ['build', 'goal', 'viz3d', 'sim'],
     dataReq: { type: 'zero', text: 'No data needed. Describe the object — Claude generates the model and simulates slicing.' },
     prompt: '"Build me a browser-based 3D print preview tool using Three.js. I describe a simple object and you generate a 3D model. Simulate the slicing process: show layer-by-layer cross-sections with a slider that scrubs through the build height. Estimate print time and material usage based on adjustable parameters: layer height, infill percentage, and print speed. Color-code areas that need support material. Show the difference between 10%, 25%, 50%, and 100% infill patterns."',
     chain: [
