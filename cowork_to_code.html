@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>From Cowork to Code</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column in the format of the Week 7A student steps (Step, who and where, goal box, what you'll see, done when), framed by the recipes page's navy masthead. */
+:root{
+  --navy:#0C2340; --gold:#C99700;
+  --bg:#F3F5F8; --card:#FFFFFF; --ink:#16233A; --muted:#566275; --line:#D9DFE8; --wash:#E8EDF4;
+  --you:#1D6A72; --claude:#0C2340; --warn:#B5481F;
+  --mast-bg:#0C2340; --mast-ink:#F4F6FA; --mast-muted:#B9C5D8;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Calibri, Carlito, "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --navy:#9DB7DF; --gold:#E2B935;
+  --bg:#0A1322; --card:#111D31; --ink:#E6EBF2; --muted:#9AA7BA; --line:#24324A; --wash:#17253D;
+  --you:#6CC3C9; --claude:#9DB7DF; --warn:#F08A5D;
+  --mast-bg:#06101F; --mast-ink:#F4F6FA; --mast-muted:#9AA9C0; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --navy:#9DB7DF; --gold:#E2B935;
+  --bg:#0A1322; --card:#111D31; --ink:#E6EBF2; --muted:#9AA7BA; --line:#24324A; --wash:#17253D;
+  --you:#6CC3C9; --claude:#9DB7DF; --warn:#F08A5D;
+  --mast-bg:#06101F; --mast-ink:#F4F6FA; --mast-muted:#9AA9C0; color-scheme:dark; }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17.5px;line-height:1.55;margin:0}
+a{color:var(--navy);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.col{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--serif);font-weight:400;text-wrap:balance;margin:0}
+.mast{background:var(--mast-bg);color:var(--mast-ink);border-bottom:4px solid var(--gold)}
+.mast .col{padding-block:30px 26px;display:grid;gap:12px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.mast h1{font-size:clamp(32px,5vw,50px);line-height:1.06}
+.mast p{margin:0;max-width:66ch;font-size:18.5px}
+.mast nav{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:13px}
+.mast nav a{color:var(--mast-muted)}
+main{padding-block:10px 50px}
+section{margin-top:34px}
+section > h2{font-size:28px;margin-bottom:10px}
+p{margin:0 0 12px}
+.note{border-left:3px solid var(--gold);background:var(--card);padding:12px 16px;border-radius:0 6px 6px 0;margin:14px 0}
+.note p:last-child{margin:0}
+/* table */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--wash)}
+tbody th{font-weight:700;width:22%}
+tr.grp td{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--bg);padding-block:6px}
+td.same{color:var(--muted)}
+@media (max-width:560px){ table,thead,tbody,tr,th,td{display:block} thead{display:none} tbody th{width:auto;border-bottom:0;padding-bottom:2px} td{border-bottom:0;padding-top:2px} td::before{content:attr(data-l);display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)} tr{border-bottom:1px solid var(--line);padding-block:6px} tr.grp td::before{content:none} }
+/* ideas */
+.ideas{margin:0;padding-left:24px;display:grid;gap:10px}
+.ideas li{padding-left:4px}
+/* steps */
+.step{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-top:14px;display:grid;gap:10px}
+.step header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px}
+.step h3{font-size:22px}
+.who{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
+.step > *{min-width:0}
+.who .y{color:var(--you)} .who .c{color:var(--claude)}
+.goal{position:relative;background:var(--wash);border-left:3px solid var(--gold);border-radius:4px;padding:12px 16px}
+.goal p{margin:0;padding-right:62px}
+.goal .copy{position:absolute;top:9px;right:9px;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:4px;padding:2px 9px;cursor:pointer}
+.lbl{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+.done{border-top:1px dashed var(--line);padding-top:10px}
+.step p{margin:0}
+.paths{display:grid;gap:10px}
+.path{border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.path h4{margin:0 0 6px;font-size:16px}
+kbd,code{font-family:var(--mono);font-size:.88em;background:var(--wash);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+/* stuck cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.cards article{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--warn);border-radius:6px;padding:12px 14px;min-width:0}
+.cards h3{font-family:var(--sans);font-weight:700;font-size:16px;margin-bottom:4px}
+.cards p{margin:0;font-size:15.5px}
+dl.gloss{display:grid;grid-template-columns:minmax(110px,max-content) minmax(0,1fr);gap:8px 18px;margin:0}
+dl.gloss dt{font-family:var(--mono);font-size:14.5px;font-weight:500}
+dl.gloss dd{margin:0}
+@media (max-width:520px){dl.gloss{grid-template-columns:1fr} dl.gloss dd{margin-bottom:6px}}
+.models{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.models div{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:15px}
+.models b{display:block;font-family:var(--serif);font-weight:400;font-size:19px}
+.models .no{border-color:var(--warn)}
+footer{border-top:1px solid var(--line);padding-block:20px 40px;color:var(--muted);font-size:14.5px}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="col">
+    <div class="eyebrow">CDT 30750 &middot; Generative AI in the Wild &middot; Weeks 12&ndash;13</div>
+    <h1>From Cowork to Code: An Introduction and Practice</h1>
+    <p>You have already used Claude Code once: Step 1 of the research database had you install Obsidian from the Code tab. This page explains what changes when you move from Cowork to Code, then walks you through up to an hour of practice, so that you can take on any recipe on the recipes page.</p>
+    <nav><a href="#shift">The shift</a><a href="#table">Cowork and Code side by side</a><a href="#ideas">Ideas that make Code make sense</a><a href="#allowance">Finite resources</a><a href="#steps">Practice</a><a href="#stuck">When you get stuck</a><a href="#words">Words to know</a><a href="claude_code_recipes.html">Back to the recipes</a></nav>
+  </div>
+</header>
+
+<main class="col">
+
+<section id="shift">
+  <h2>The shift</h2>
+  <p>In Week 6, Prof. Smiley drew the line between the two tabs this way. In Cowork, you hand Claude a task and a folder, and it works through the steps and hands back finished files. In Code, you work alongside Claude inside a folder: it reads and edits the files there, follows the folder's CLAUDE.md, and learns your skills. His slide also said "No coding required," and that is still true. You will not write code here. You will read what Claude proposes, approve or refuse it, open what it made, and tell it what to fix.</p>
+  <p>The practical difference is visibility. In Cowork you mostly see the finished result. In Code you see each step as it happens: every file Claude reads, every file it writes and every command it runs, all inside a folder you can open yourself. Code takes more watching because of that, and it is also why Code is the better place to learn how these systems behave.</p>
+  <div class="note"><p>Prof. Smiley's line from Week 6 is the right attitude for this work: "You aren't prompting, you are&hellip; managing." Managing means saying what done looks like, checking the plan, and checking the result.</p></div>
+</section>
+
+<section id="table">
+  <h2>Cowork and Code side by side</h2>
+  <p>Most of what you learned in Cowork carries over. The table groups the differences first and the things that stay the same last.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Idea</th><th>In Cowork</th><th>In Code</th></tr></thead>
+    <tbody>
+      <tr class="grp"><td colspan="3">Where the work lives</td></tr>
+      <tr><th>The workspace</th><td data-l="In Cowork">Claude works in its own workspace and hands you finished files.</td><td data-l="In Code">Claude works inside one folder on your laptop. The files in that folder are the product.</td></tr>
+      <tr><th>Seeing the result</th><td data-l="In Cowork">An artifact or document opens in the app.</td><td data-l="In Code">You open the file yourself from the folder, usually by double-clicking it. Some pages need a small local server, which Claude can start.</td></tr>
+      <tr class="grp"><td colspan="3">Staying in control</td></tr>
+      <tr><th>Planning first</th><td data-l="In Cowork">You ask Claude to show its plan before it acts.</td><td data-l="In Code">You choose Plan mode in the permission menu, and Claude cannot change anything until you approve the plan.</td></tr>
+      <tr><th>Permission</th><td data-l="In Cowork">Claude checks with you before big changes.</td><td data-l="In Code">Claude asks before each command it runs. You choose Allow or Deny every time, unless you change the mode.</td></tr>
+      <tr><th>Undo</th><td data-l="In Cowork">You ask Claude to put things back.</td><td data-l="In Code">Claude Code keeps checkpoints you can rewind to. A copy of your folder is a second safety net.</td></tr>
+      <tr class="grp"><td colspan="3">Instructions and memory</td></tr>
+      <tr><th>The rules file</th><td data-l="In Cowork">Your research database already has a CLAUDE.md that Cowork follows.</td><td data-l="In Code">It is the same file. Claude Code reads it at the start of every session. <code>/init</code> writes a starter one for a new folder.</td></tr>
+      <tr><th>Picking up later</th><td data-l="In Cowork">The task history in the app.</td><td data-l="In Code">A short notes file in the folder that says where things stand, so a fresh session can continue.</td></tr>
+      <tr class="grp"><td colspan="3">The same in both</td></tr>
+      <tr><th>Skills</th><td class="same" data-l="In Cowork">Once a skill is added, Claude uses it automatically whenever a task matches what the skill is for. You do not have to call it.</td><td class="same" data-l="In Code">The same skill format, used automatically the same way. You can also run a skill by name, for example <code>/skill-creator</code>.</td></tr>
+      <tr><th>Scheduled tasks</th><td class="same" data-l="In Cowork">Set up and managed in the app's scheduled tasks screen, as you did for your research database, or by asking Claude.</td><td class="same" data-l="In Code">Claude Code can also run work on a schedule. Ask Claude to set it up. Each scheduled run counts against your usage limits.</td></tr>
+      <tr><th>Choosing a model</th><td class="same" data-l="In Cowork">Pick the model from the model menu in the app.</td><td class="same" data-l="In Code">Pick it from the menu, or type <code>/model</code>.</td></tr>
+      <tr><th>Usage limits</th><td class="same" data-l="In Cowork">Cowork tasks count against the same usage limits as your chats.</td><td class="same" data-l="In Code">Code sessions count against those same limits, so time spent in one tab is time you cannot spend in the other. Type <code>/usage</code> to see what is left.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="ideas">
+  <h2>Ideas that make Code make sense</h2>
+  <ol class="ideas">
+    <li><strong>The folder is the project.</strong> Everything Claude makes is an ordinary file in one folder, and you can open any of those files yourself. This is the course's first computing idea, that files live in directories, put to work.</li>
+    <li><strong>Plan mode is your game plan.</strong> Start every new piece of work in Plan mode. Claude lays out what it intends to do before it touches anything, and you read the plan, change it and approve it. Reading a plan for a minute costs less, in time and in usage, than undoing a build you did not want. If Claude heads somewhere you did not expect once it is working, you can stop it and redirect it.</li>
+    <li><strong>Claude types the commands, and you read them.</strong> When Claude asks to run something like <code>python3 build_map.py</code>, it is asking to start a program. Allow it when you understand the explanation and the command stays inside your folder. Deny it when it reaches outside your folder, deletes things you did not ask to delete, or you cannot tell what it does. Then ask Claude to explain.</li>
+    <li><strong>When you do not understand the question, say so.</strong> Claude will sometimes ask you to choose between options that use words you have not met, such as a library, a file format or a "server." Do not pick one just to keep things moving. Answer with something like: "I don't understand the question. Explain each option in plain language, tell me what would happen with each, and tell me which you recommend and why." Then decide. You can also open a separate Claude chat in your browser at claude.ai and ask it there. That keeps your Code session focused on the build, and a short side conversation is a cheap way to learn a term. Keep in mind that the side chat cannot see your folder or your Code session, so paste in the exact question or option you are asking about. Often it is easier to take a screenshot of what Claude is asking and drop it into the chat, because the screenshot shows the buttons and context too. On a Mac, press <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd> and drag over the area. On Windows, press <kbd>Windows</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>. Never paste in a key from a .env file, and check that a screenshot doesn't show one. Use its answer to help you understand the choice, and then make the decision yourself. It's normal not to know these terms. Just don't approve anything until you do.</li>
+    <li><strong>The work happens in a loop.</strong> Claude builds, you open the result and look, you tell Claude what is wrong, and it fixes it. Expect three or four turns of this loop before something looks right.</li>
+    <li><strong>Error messages tell you what went wrong.</strong> A red message is the computer reporting what failed. Paste it back to Claude, or just say "it failed, read the error." Nobody gets through a build without errors.</li>
+    <li><strong>What Claude knows about your project is in the files.</strong> Prof. Smiley called CLAUDE.md the "brain" of the folder. It is really a plain text file of rules, and it works because Claude reads it at the start of every session. A short notes file does the same thing for where you left off. Starting a fresh session with a good notes file is also the cheapest way to keep working when you are close to your usage limit.</li>
+    <li><strong>You can undo.</strong> Claude Code saves checkpoints as it works, and you can rewind to one. Before any big change, you can also copy the whole folder and name the copy with the date.</li>
+  </ol>
+</section>
+
+<section id="allowance">
+  <h2>Your resources are finite and time-based</h2>
+  <p>Your plan gives you a limited amount of Claude use, measured in time windows. One limit resets every five hours, and a second limit covers the whole week. Chat, Cowork and Code all count against the same limits. Work that is spread over several days therefore gets far more done than the same work crammed into one night. Three habits from Prof. Smiley's Week 6 slides keep you from getting stuck the night before a deadline.</p>
+  <div class="models">
+    <div><b>Haiku</b>Quick and light. Sorting, tagging, short questions.</div>
+    <div><b>Sonnet</b>Your default for the practice below and for most projects.</div>
+    <div><b>Opus</b>For hard, multi-step work across many files. Use it when a task really needs it.</div>
+    <div class="no"><b>Fable</b>Do not use it on our plan. It uses up your limits very quickly.</div>
+  </div>
+  <p style="margin-top:12px">First, type <code>/usage</code> before you start something big, to see how much you have left. Second, switch models with <code>/model</code>. Third, when a conversation gets long, write a notes file and start a fresh session instead of pushing on.</p>
+</section>
+
+<section id="steps">
+  <h2>On to some practice</h2>
+  <p>Now put those ideas to work. The practice below has eight steps, in the same format as the research database steps from Week 7. Each step says who does it and where. Text in a shaded box is a goal to tell Claude. Use your own words if you like, and fill in anything in [BRACKETS]. Plan on up to an hour, and do it in one sitting if you can.</p>
+
+  <div class="step">
+    <header><h3>Step 1. Make a folder to practice in</h3><span class="who"><span class="y">You</span> &middot; Finder or File Explorer</span></header>
+    <p>Pick the path that matches where your research database is today. Everyone ends this step with a folder called <strong>GAIW Code Practice</strong> in Documents.</p>
+    <div class="paths">
+      <div class="path"><h4>Path A. Your database works</h4><p>Copy the whole <em>GAIW Research Database</em> folder and name the copy <em>GAIW Code Practice</em>. You will practice on the copy, so your real database keeps running untouched.</p></div>
+      <div class="path"><h4>Path B. You have the folder, but it is not updating or something is broken</h4><p>Copy it the same way. Step 4 below is where Claude Code helps you find out what went wrong. When you fix the original later, use what you learn on the copy.</p></div>
+      <div class="path"><h4>Path C. You never got a database folder</h4><p>Make an empty folder called <em>GAIW Code Practice</em>. Put copies of your own State of the Field files in it: your proposal, your video script, and any notes. Claude will build from those in Step 3.</p></div>
+    </div>
+    <div class="done"><span class="lbl">You're done when</span><p>GAIW Code Practice exists in Documents, and nothing in your original database has changed.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 2. Open the folder in Code and set it up</h3><span class="who"><span class="y">You</span> &middot; Claude desktop app, Code tab</span></header>
+    <p>Open the Claude desktop app and switch to the Code tab. Start a new session and choose GAIW Code Practice as its folder. Claude can now read and write in that folder and nowhere else. Set the permission mode to <strong>Plan</strong>. Then type these three commands, one at a time: <code>/status</code> (which account and model you are on), <code>/usage</code> (how much of your usage limits you have left), and <code>/model</code> (pick Sonnet).</p>
+    <div class="done"><span class="lbl">You're done when</span><p>The session shows your practice folder, the mode says Plan, and the model is Sonnet.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 3. Take a tour without changing anything</h3><span class="who"><span class="c">Claude</span> &middot; Code tab</span></header>
+    <div class="goal"><p>My goal: understand what's in this folder before we change anything. Walk me through it. Tell me what each folder and file is for, what CLAUDE.md tells you to do, and whether there are any hidden files or folders, like .claude. Assume I've never looked inside a project folder before. Don't change anything.</p><button type="button" class="copy">Copy</button></div>
+    <p><span class="lbl">Path C</span>Use this goal instead: <em>My goal: turn the State of the Field files in this folder into a small research database like the one we built in Week 7. Put my originals in raw/, make a note for each source and each idea, and add an index, a log and a CLAUDE.md with the rules. I write in insights/. You never do. Don't ever violate this rule. Only use sources that are in my files, and never make one up. Show me the plan and wait for my OK.</em></p>
+    <p><span class="lbl">What you'll see</span>Claude reads the files and then describes the folder. On Path C, Claude shows you a plan and waits. Approve it when you agree with it, and Claude will ask permission as it creates each file.</p>
+    <p>To see hidden files yourself, press <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>.</kbd> in a Mac Finder window, or choose View &rarr; Show &rarr; Hidden items in Windows File Explorer.</p>
+    <div class="done"><span class="lbl">You're done when</span><p>You could explain to a classmate what three of the folders are for.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 4. Give the folder a check-up</h3><span class="who"><span class="c">Claude</span> &middot; Code tab</span></header>
+    <div class="goal"><p>My goal: find out whether this database is healthy. Check for broken links, notes that nothing links to, sources that are missing key details, and notes the index leaves out. If there's a check-up script in system/, run it. If there isn't one, write one. Then read log.md and tell me whether the scheduled update has run every weekday. If it hasn't, tell me what the log says went wrong. Show me your plan first, and don't fix anything until I say so.</p><button type="button" class="copy">Copy</button></div>
+    <p><span class="lbl">What you'll see</span>A plan, then a request to run a command such as <code>python3 system/checkup.py</code>. This is your first real permission decision. Read Claude's explanation, check that the command stays inside your folder, and choose Allow.</p>
+    <p><span class="lbl">Path B</span>This step is where you find out why your database stopped. Common causes are a laptop that was asleep at the scheduled time, a task that was never saved, or a rule in CLAUDE.md that Claude could not follow. Write down what you find.</p>
+    <div class="done"><span class="lbl">You're done when</span><p>Claude has given you a report with exact counts, and you know what is and is not working.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 5. Build something new: a 3D map of your database</h3><span class="who"><span class="c">Claude</span>, then <span class="y">you</span> &middot; Code tab, then your browser</span></header>
+    <div class="goal"><p>My goal: a 3D map of this database that I can fly through in my browser. Make each note a dot. Size the dots by how many links they have, and color them by folder (sources, concepts, insights and system). When I click a dot, show me the note's title and its first few lines. Put it all in one HTML file in a new folder called views-3d, and tell me exactly how to open it. Show me the plan first.</p><button type="button" class="copy">Copy</button></div>
+    <p><span class="lbl">What you'll see</span>A plan, then permission requests to read your notes and write a script and a page. Claude may ask to start a "local server" so your browser can load the page. That is a small program that runs only on your laptop. Allow it, and Claude will give you an address that starts with <code>http://localhost</code> to open.</p>
+    <p><span class="lbl">Then you</span>Open the page, fly around, and find your own insight notes. Write down one thing that looks wrong.</p>
+    <div class="done"><span class="lbl">You're done when</span><p>The map opens in your browser and you can click a dot and read a note.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 6. Run the loop, and try an undo</h3><span class="who"><span class="y">You</span> &rarr; <span class="c">Claude</span> &middot; Code tab</span></header>
+    <p>Tell Claude the thing that looked wrong in Step 5, in plain words, and let it fix it. Then ask for one change you might not want, such as "make every dot the same color." Look at the result. Now undo it. Rewind to the checkpoint before that change, or ask Claude how to do that in your version of the app.</p>
+    <div class="done"><span class="lbl">You're done when</span><p>You have fixed one real problem and undone one change on purpose.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 7. Leave a note for next time</h3><span class="who"><span class="c">Claude</span>, then <span class="y">you</span> &middot; Code tab</span></header>
+    <div class="goal"><p>My goal: be able to pick this up tomorrow in a new session. Write a short NOTES.md in this folder that says what we built today, how to rebuild the 3D map, what's still broken, and what I want to try next. Then add a line to CLAUDE.md that tells future sessions to read NOTES.md first. Show me both changes before you save them.</p><button type="button" class="copy">Copy</button></div>
+    <p><span class="lbl">Then you</span>Type <code>/usage</code> again and compare with Step 2. That difference is what this practice cost against your limits. Close the session, start a new one in the same folder, and ask "Where did we leave off?"</p>
+    <div class="done"><span class="lbl">You're done when</span><p>A brand-new session can tell you where you left off without you explaining.</p></div>
+  </div>
+
+  <div class="step">
+    <header><h3>Step 8 (optional). Bring something over from Cowork</h3><span class="who"><span class="y">You</span>, then <span class="c">Claude</span> &middot; Cowork, then Code tab</span></header>
+    <p>Take something you already made in Cowork, such as a page, a document or a spreadsheet. Save or download it into your practice folder. Then ask Claude Code to add one feature to it. This shows you that work can move back and forth between the two tabs.</p>
+    <div class="done"><span class="lbl">You're done when</span><p>Something that started in Cowork has a new feature added in Code.</p></div>
+  </div>
+
+  <div class="note"><p>Ready to build something of your own? Go back to the <a href="claude_code_recipes.html">recipes</a> and pick one. Make a <em>new</em> folder for it, start in Plan mode, and bring the habits from this practice: check /usage, use Sonnet by default, and keep a NOTES.md.</p></div>
+</section>
+
+<section id="stuck">
+  <h2>When you get stuck</h2>
+  <div class="cards">
+    <article><h3>The page opens blank</h3><p>Browsers block some pages opened straight from a folder. Ask Claude to "serve this folder locally and give me the address," then open the localhost address it gives you.</p></article>
+    <article><h3>Claude asks to run something you don't understand</h3><p>Choose Deny, then ask "What does that command do, and does it touch anything outside this folder?" Allow it only once the answer makes sense.</p></article>
+    <article><h3>"Command not found"</h3><p>A program Claude expected is not installed. Ask it to find a way that needs nothing new installed. Claude can usually do the same work with tools already on your laptop.</p></article>
+    <article><h3>You hit a usage limit</h3><p>Claude Code wraps up the current step. Ask it to update NOTES.md if it can, then come back after the reset with a fresh session. Write down when it happened, so you can plan around the limit next time.</p></article>
+    <article><h3>You don't understand Claude's question</h3><p>Say so. Ask Claude to explain each option in plain language, what would happen with each, and which it recommends and why. You can also paste the question, or a screenshot of it, into a separate claude.ai chat in your browser, ask a classmate, or bring it to office hours before you answer.</p></article>
+    <article><h3>Claude changed the wrong file</h3><p>Rewind to the checkpoint before the change. Then add a rule to CLAUDE.md that names the files it should leave alone.</p></article>
+    <article><h3>The conversation feels lost</h3><p>Long sessions drift, and they also count more heavily against your usage limits. Ask Claude to update NOTES.md, start a fresh session, and say "read NOTES.md and continue."</p></article>
+  </div>
+</section>
+
+<section id="words">
+  <h2>Words to know</h2>
+  <dl class="gloss">
+    <dt id="g-folder">folder (directory)</dt><dd>A container for files. In Code, the folder you choose is the only place Claude can read and write.</dd>
+    <dt id="g-path">path</dt><dd>The address of a file, such as <code>Documents/GAIW Code Practice/index.md</code>.</dd>
+    <dt id="g-md">.md</dt><dd>Markdown, a plain-text file format. Your notes, CLAUDE.md and NOTES.md are all .md files.</dd>
+    <dt id="g-hidden-file">hidden file</dt><dd>A file whose name starts with a dot, such as <code>.claude</code> or <code>.env</code>. It is there, just not shown by default.</dd>
+    <dt id="g-terminal">terminal</dt><dd>The text window where commands run. In the Code tab, Claude uses it for you and shows you what it ran.</dd>
+    <dt id="g-command">command</dt><dd>One instruction to the computer, such as starting a program. Claude asks permission before each one.</dd>
+    <dt id="g-script">script</dt><dd>A small program saved in a file, such as a check-up script that counts broken links.</dd>
+    <dt id="g-local-server">local server</dt><dd>A small program on your own laptop that lets your browser open the pages in your folder.</dd>
+    <dt id="g-localhost">localhost</dt><dd>The name your browser uses for "this computer." An address like <code>http://localhost:8000</code> never leaves your laptop.</dd>
+    <dt id="g-env">.env</dt><dd>A hidden file that holds secret keys for data sources. Claude reads keys from it so you never paste them into the chat.</dd>
+
+    <dt id="g-api">API</dt><dd>Short for application programming interface. It is a door a website leaves open for programs instead of people, so code can ask it for data, such as a list of bills from Congress or a molecule from PubChem.</dd>
+    <dt id="g-api-key">API key</dt><dd>A password-like code that a data source gives you so it knows who is asking. Keep it in your .env file, never in the chat.</dd>
+    <dt id="g-mcp">MCP</dt><dd>Model Context Protocol, a standard way to plug new tools and data sources into Claude. Connectors use it.</dd>
+    <dt id="g-subagent">subagent</dt><dd>A helper that Claude Code starts to handle one piece of a job. It works in its own conversation and reports back to the main session.</dd>
+    <dt id="g-virtual-environment">virtual environment</dt><dd>A folder that holds the Python software for one project, kept separate from the rest of your computer. Deleting the folder removes the software.</dd>
+    <dt id="g-open-model">open model</dt><dd>An AI model whose weights anyone can download and run, often from Hugging Face. Small ones run on a laptop with tools like Ollama or LM Studio.</dd>
+    <dt id="g-glb">GLB</dt><dd>A common file format for 3D models with their colors and textures, used by web viewers and game engines.</dd>
+    <dt id="g-stl">STL</dt><dd>A file format for 3D shapes without color, used by 3D printers.</dd>
+    <dt id="g-splat">Gaussian splat</dt><dd>A way of storing a 3D scene as millions of soft, colored blobs instead of solid surfaces. It looks photographic, but there is nothing solid in it to bump into.</dd>
+    <dt id="g-monte-carlo">Monte Carlo simulation</dt><dd>Running the same calculation thousands of times with random inputs to see the range of possible results.</dd>
+  </dl>
+</section>
+
+</main>
+
+<footer class="col">
+  <p>Built on Prof. David Smiley's Week 6 "Getting Started with Claude: Cowork and Code" slides and the Week 7A research database steps. App menus change; if a button is not where this page says, ask Claude where it is in your version. Current as of November 2026.</p>
+</footer>
+
+<script>
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.copy'); if(!b) return;
+  const p=b.parentElement.querySelector('p'); const t=p.textContent;
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(p);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected';};
+  try{ navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500);},sel); }catch(err){ sel(); }
+});
+</script>
+</body>
+</html>
